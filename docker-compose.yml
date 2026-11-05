@@ -39,6 +39,7 @@ services:
     volumes:
       - ./dags:/opt/airflow/dags
       - ./data:/opt/airflow/data
+      - ./transformations:/opt/airflow/transformations
     ports:
       - "8080:8080"
 

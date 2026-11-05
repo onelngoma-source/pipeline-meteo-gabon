@@ -7,9 +7,12 @@ from datetime import timedelta
 from pathlib import Path
 
 import pendulum
+from airflow.providers.standard.operators.bash import BashOperator
 from airflow.sdk import dag, get_current_context, task
 
 FUSEAU = pendulum.timezone("Africa/Libreville")
+DBT = os.environ.get("DBT_EXECUTABLE", "/opt/dbt-venv/bin/dbt")
+PROJET_DBT = os.environ.get("DBT_PROJET", "/opt/airflow/transformations")
 
 
 @dag(
@@ -69,10 +72,18 @@ def meteo_gabon_quotidien():
         if lignes != len(VILLES):
             raise ValueError(f"{lignes} lignes trouvées pour le {jour}, {len(VILLES)} attendues")
 
+    transformer = BashOperator(
+        task_id="transformer_dbt",
+        bash_command=(
+            f"{DBT} build --project-dir {PROJET_DBT} --profiles-dir {PROJET_DBT} "
+            "--target-path /tmp/dbt/target --log-path /tmp/dbt/logs"
+        ),
+    )
+
     jour = determiner_jour()
     chemin = extraire(jour)
     chargement = charger_fichier(chemin)
-    chargement >> verifier(jour)
+    chargement >> verifier(jour) >> transformer
 
 
 meteo_gabon_quotidien()
