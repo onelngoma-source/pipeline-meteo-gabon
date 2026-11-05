@@ -101,8 +101,8 @@ colonne3.metric(
     delta_color="inverse",
 )
 colonne4.metric(
-    f"Tendance {int(annuel_ville['annee'].min())}-{int(annuel_ville['annee'].max())}",
-    f"{tendance:+.2f} °C / décennie",
+    f"Tendance par décennie ({int(annuel_ville['annee'].min())}-{int(annuel_ville['annee'].max())})",
+    f"{tendance:+.2f} °C",
 )
 
 gauche, droite_colonne = st.columns(2)
@@ -130,7 +130,9 @@ with gauche:
         secondary_y=True,
     )
     climatogramme.update_yaxes(title_text="Pluie (mm)", secondary_y=False)
-    climatogramme.update_yaxes(title_text="Température (°C)", secondary_y=True)
+    climatogramme.update_yaxes(
+        title_text="Température (°C)", tickformat=".1f", secondary_y=True
+    )
     climatogramme.update_layout(
         legend={"orientation": "h", "y": -0.15}, margin={"t": 10}
     )
