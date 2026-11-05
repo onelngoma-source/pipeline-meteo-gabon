@@ -105,5 +105,14 @@ def main() -> None:
     logger.info("%d lignes enregistrées dans %s", len(df), chemin)
 
 
-if __name__ == "__main__":
-    main()
+def collecter(debut: date, fin: date, archive: bool = False) -> pd.DataFrame:
+    """Collecte la météo de toutes les villes sur la période demandée."""
+    session = creer_session()
+    tableaux = []
+    for ville in VILLES:
+        logger.info("Collecte de %s du %s au %s", ville.nom, debut, fin)
+        donnees = recuperer_meteo(session, ville, debut, fin, archive)
+        tableaux.append(json_vers_dataframe(donnees, ville))
+    df = pd.concat(tableaux, ignore_index=True)
+    df["source"] = "archive" if archive else "previsions"
+    return df
