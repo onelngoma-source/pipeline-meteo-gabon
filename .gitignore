@@ -10,3 +10,6 @@ wheels/
 .venv
 data/
 .env
+transformations/target/
+transformations/logs/
+transformations/dbt_packages/

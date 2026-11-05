@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: meteo_mensuelle
+    description: Une ligne par ville et par mois.
+    columns:
+      - name: debut_mois
+        data_tests:
+          - not_null
+      - name: mois_complet
+        description: Vrai si toutes les journées du mois sont présentes.
+
+  - name: normales_mensuelles
+    description: Normales climatiques 1991-2020, une ligne par ville et par mois.
+    columns:
+      - name: mois
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                quote: false
+
+  - name: anomalies_mensuelles
+    description: Écart de chaque mois complet à la normale de la ville.
+    columns:
+      - name: ecart_temp_c
+        data_tests:
+          - not_null

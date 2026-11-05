@@ -1,0 +1,20 @@
+name: meteo_gabon
+version: "1.0.0"
+profile: meteo_gabon
+
+model-paths: ["models"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+
+vars:
+  normale_debut: 1991
+  normale_fin: 2020
+
+models:
+  meteo_gabon:
+    staging:
+      +schema: staging
+      +materialized: view
+    marts:
+      +schema: analytique
+      +materialized: table

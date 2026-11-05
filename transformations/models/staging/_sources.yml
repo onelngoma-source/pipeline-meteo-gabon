@@ -1,0 +1,21 @@
+version: 2
+
+sources:
+  - name: brut
+    description: Données météo telles qu'elles arrivent de l'API Open-Meteo.
+    schema: brut
+    tables:
+      - name: meteo_quotidienne
+        description: Une ligne par ville et par jour.
+        config:
+          loaded_at_field: collecte_le
+          freshness:
+            warn_after: {count: 2, period: day}
+            error_after: {count: 4, period: day}
+
+  - name: ref
+    description: Données de référence.
+    schema: ref
+    tables:
+      - name: villes
+        description: Les 9 chefs-lieux de province du Gabon.
